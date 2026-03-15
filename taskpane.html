@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+    <script type="module" src="https://unpkg.com/@fluentui/web-components"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        body { margin: 0; padding: 16px; font-family: 'Segoe UI', sans-serif; background-color: #faf9f8; }
+        .container { display: flex; flex-direction: column; gap: 12px; }
+        .header { display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #edebe9; padding-bottom: 10px; }
+        .brand-title { color: #0078d4; font-weight: 600; font-size: 16px; }
+        .setting-section { background: #f3f2f1; padding: 10px; border-radius: 4px; }
+        .label { font-size: 11px; font-weight: bold; color: #605e5c; margin-bottom: 4px; display: block; }
+        #result-card { background: white; border: 1px solid #edebe9; border-radius: 6px; padding: 15px; margin-top: 10px; min-height: 100px; }
+        #result h3 { color: #0078d4; font-size: 15px; border-left: 4px solid #0078d4; padding-left: 8px; margin: 15px 0 8px 0; }
+        #result p, #result li { font-size: 13.5px; line-height: 1.5; color: #323130; }
+        .hidden { display: none !important; }
+        #action-bar { margin-top: 15px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="../../assets/icon-32.png" width="24" height="24">
+            <span class="brand-title">DeepLink 翻译助手</span>
+        </div>
+        <div class="setting-section">
+            <span class="label">分析模式</span>
+            <fluent-select id="mode-select" style="width: 100%;">
+                <fluent-option value="academic">学术翻译模式</fluent-option>
+                <fluent-option value="quick">极简总结模式</fluent-option>
+            </fluent-select>
+        </div>
+        <fluent-button id="analyze" appearance="accent">智能分析邮件</fluent-button>
+        <div id="loading" class="hidden" style="text-align: center; padding: 20px;">
+            <fluent-progress-ring></fluent-progress-ring>
+            <p style="font-size: 12px; color: #0078d4;">正在深度分析中...</p>
+        </div>
+        <div id="result-card">
+            <div id="result">选定邮件后点击按钮。</div>
+            <div id="action-bar" class="hidden">
+                <fluent-button id="copy-btn" appearance="outline" style="width: 100%;">复制结果</fluent-button>
+            </div>
+        </div>
+    </div>
+    <script>
+        window.renderMarkdown = (text) => {
+            const resultDiv = document.getElementById('result');
+            if(resultDiv) resultDiv.innerHTML = marked.parse(text);
+        };
+    </script>
+</body>
+</html>
