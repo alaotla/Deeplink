@@ -5,8 +5,6 @@ Office.onReady((info) => {
     const loading = document.getElementById("loading");
     const modeSelect = document.getElementById("mode-select");
 
-    if (!analyzeBtn) return;
-
     analyzeBtn.onclick = async () => {
       resultDiv.innerText = "";
       loading.classList.remove("hidden");
@@ -14,7 +12,7 @@ Office.onReady((info) => {
       Office.context.mailbox.item.body.getAsync("text", async (res) => {
         if (res.status === Office.AsyncResultStatus.Succeeded) {
           try {
-            // 【关键修改】把下面的链接换成你刚刚在 Vercel 看到的域名，记得保留末尾的 /api/analyze
+            // 这里填写你的 Vercel 后端地址
             const response = await fetch("https://deeplink-eosin.vercel.app/api/analyze", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
@@ -23,6 +21,10 @@ Office.onReady((info) => {
                 mode: modeSelect.value
               })
             });
+
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
 
             const data = await response.json();
             loading.classList.add("hidden");
@@ -34,7 +36,8 @@ Office.onReady((info) => {
             }
           } catch (e) {
             loading.classList.add("hidden");
-            resultDiv.innerText = "连接服务器失败，请检查网络";
+            resultDiv.innerText = "连接服务器失败，请稍后再试。";
+            console.error(e);
           }
         }
       });
